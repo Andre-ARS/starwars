@@ -5,6 +5,7 @@ import PlanetContext from './PlanetContext';
 function PlanetProvider({ children }) {
   const [data, setData] = useState();
   const [filterByName, setfilterByName] = useState('');
+  const [filterByNumericValues, setfilterByNumericValues] = useState({});
 
   useEffect(() => {
     const fetchPlanets = async () => {
@@ -20,7 +21,9 @@ function PlanetProvider({ children }) {
   const contextValue = {
     data,
     filterByName,
+    filterByNumericValues,
     setfilterByName,
+    setfilterByNumericValues,
   };
 
   return (
