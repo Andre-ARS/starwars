@@ -3,13 +3,12 @@ import PlanetContext from '../../context/PlanetContext';
 import Loading from '../Loading';
 
 export default function Table() {
-  const { data } = useContext(PlanetContext);
+  const { data, filterByName } = useContext(PlanetContext);
 
   if (!data) return <Loading />;
 
   const tableHeads = Object.keys(data.results[0]).filter((key) => key !== 'residents');
-  const planets = data.results;
-  console.log(tableHeads);
+  const planets = data.results.filter(({ name }) => name.includes(filterByName));
   return (
     <table>
       <thead>
