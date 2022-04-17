@@ -14,7 +14,9 @@ export default function Filter() {
   const {
     filterByName,
     setfilterByName,
-    setfilterByNumericValues } = useContext(PlanetContext);
+    setfilterByNumericValues,
+    setMultfilter,
+    multFilter } = useContext(PlanetContext);
   const [numFilter, setNumFilter] = useState({
     column: 'population',
     comparison: 'maior que',
@@ -32,6 +34,7 @@ export default function Filter() {
     event.preventDefault();
 
     setfilterByNumericValues({ ...numFilter });
+    setMultfilter([...multFilter, { ...numFilter }]);
   };
 
   return (
