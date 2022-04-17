@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import PlanetContext from '../../context/PlanetContext';
 
 const NUM_FILTER_OPT = [
@@ -22,6 +22,14 @@ export default function Filter() {
     comparison: 'maior que',
     value: 0,
   });
+  const usedColumns = multFilter.map(({ column }) => column);
+  useEffect(() => {
+    setNumFilter({
+      ...numFilter,
+      column: NUM_FILTER_OPT.filter((optt) => !usedColumns
+        .some((column) => optt === column))[0],
+    });
+  }, [multFilter]);
 
   const handleChange = ({ target: { name, value } }) => {
     setNumFilter({
@@ -55,9 +63,11 @@ export default function Filter() {
             value={ numFilter.column }
             onChange={ handleChange }
           >
-            { NUM_FILTER_OPT.map((opt) => (
-              <option value={ opt } key={ opt }>{ opt }</option>
-            )) }
+            { NUM_FILTER_OPT.filter((optt) => !usedColumns
+              .some((column) => optt === column))
+              .map((opt) => (
+                <option value={ opt } key={ opt }>{ opt }</option>
+              ))}
           </select>
         </label>
         <label htmlFor="comparison">
