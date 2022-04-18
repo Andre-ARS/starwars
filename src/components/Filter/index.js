@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import PlanetContext from '../../context/PlanetContext';
 
 const NUM_FILTER_OPT = [
@@ -17,12 +17,22 @@ export default function Filter() {
     setfilterByNumericValues,
     setMultfilter,
     multFilter } = useContext(PlanetContext);
+
   const [numFilter, setNumFilter] = useState({
     column: 'population',
     comparison: 'maior que',
     value: 0,
   });
+
   const usedColumns = multFilter.map(({ column }) => column);
+
+  useEffect(() => {
+    setNumFilter({
+      ...numFilter,
+      column: NUM_FILTER_OPT.filter((optt) => !usedColumns
+        .some((column) => optt === column))[0],
+    });
+  }, [multFilter]);
 
   const handleChange = ({ target: { name, value } }) => {
     setNumFilter({
@@ -93,6 +103,13 @@ export default function Filter() {
 
         </button>
       </form>
+      <button
+        type="button"
+        data-testid="button-remove-filters"
+        onClick={ () => setMultfilter([]) }
+      >
+        Remover Filtros
+      </button>
     </header>
   );
 }

@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import PlanetContext from '../../context/PlanetContext';
+import FilterDisplay from '../FilterDisplay';
 import Loading from '../Loading';
 
 export default function Table() {
@@ -8,12 +9,10 @@ export default function Table() {
     filterByName,
     filterByNumericValues,
     multFilter } = useContext(PlanetContext);
-  // const [filtredPlanet, setFiltredPlanet] = useState([{ name: 'xablau' }]);
 
   if (!data) return <Loading />;
 
-  const getFilterValues = (arr) => {
-    // const { column, comparison, value } = filterByNumericValues;
+  const getFilteredValues = (arr) => {
     let filteredValues = arr;
     multFilter.map(({ column, comparison, value }) => {
       let filter = [];
@@ -33,26 +32,25 @@ export default function Table() {
   const tableHeads = Object.keys(data.results[0]).filter((key) => key !== 'residents');
   const planets = data.results
     .filter(({ name }) => name.includes(filterByName));
-  // console.log(filtredPlanet);
-  const filtredPlanets = filterByNumericValues ? getFilterValues(planets) : planets;
-  // if (filterByNumericValues && filtredPlanets
-  //   .some((planet, i) => planet.name !== filtredPlanet[i].name)) {
-  //   setFiltredPlanet(filtredPlanets);
-  // }
+  const filtredPlanets = filterByNumericValues ? getFilteredValues(planets) : planets;
+
   return (
-    <table>
-      <thead>
-        <tr key="">
-          { tableHeads.map((head) => <th key={ head }>{ head }</th>) }
-        </tr>
-      </thead>
-      <tbody>
-        { filtredPlanets.map((planet) => (
-          <tr key={ planet.name }>
-            { tableHeads.map((head) => <td key={ planet[head] }>{ planet[head] }</td>)}
+    <main>
+      <FilterDisplay />
+      <table>
+        <thead>
+          <tr key="">
+            { tableHeads.map((head) => <th key={ head }>{ head }</th>) }
           </tr>
-        )) }
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          { filtredPlanets.map((planet) => (
+            <tr key={ planet.name }>
+              { tableHeads.map((head) => <td key={ planet[head] }>{ planet[head] }</td>)}
+            </tr>
+          )) }
+        </tbody>
+      </table>
+    </main>
   );
 }
