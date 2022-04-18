@@ -16,12 +16,17 @@ export default function Filter() {
     setfilterByName,
     setfilterByNumericValues,
     setMultfilter,
-    multFilter } = useContext(PlanetContext);
+    multFilter,
+    setSort } = useContext(PlanetContext);
 
   const [numFilter, setNumFilter] = useState({
     column: 'population',
     comparison: 'maior que',
     value: 0,
+  });
+  const [order, setOrder] = useState({
+    columnSort: 'population',
+    sortOrder: 'ASC',
   });
 
   const usedColumns = multFilter.map(({ column }) => column);
@@ -32,21 +37,32 @@ export default function Filter() {
       column: NUM_FILTER_OPT.filter((optt) => !usedColumns
         .some((column) => optt === column))[0],
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [multFilter]);
 
-  const handleChange = ({ target: { name, value } }) => {
+  const filterChange = ({ target: { name, value } }) => {
     setNumFilter({
       ...numFilter,
       [name]: value,
     });
   };
 
-  const handleSubmit = (event) => {
+  const orderChange = ({ target: { name, value } }) => {
+    setOrder({
+      ...order,
+      [name]: value,
+    });
+  };
+  const handleSubmit = (event, name) => {
     event.preventDefault();
 
-    setfilterByNumericValues({ ...numFilter });
-    setMultfilter([...multFilter, { ...numFilter }]);
-    setNumFilter({ ...numFilter, value: 0 });
+    if (name === 'filter') {
+      setfilterByNumericValues({ ...numFilter });
+      setMultfilter([...multFilter, { ...numFilter }]);
+      setNumFilter({ ...numFilter, value: 0 });
+    } else {
+      setSort({ ...order });
+    }
   };
 
   return (
@@ -57,7 +73,7 @@ export default function Filter() {
         onChange={ ({ target: { value } }) => setfilterByName(value) }
         data-testid="name-filter"
       />
-      <form onSubmit={ handleSubmit }>
+      <form onSubmit={ (e) => handleSubmit(e, 'filter') }>
         <label htmlFor="column">
           Coluna
           <select
@@ -65,7 +81,7 @@ export default function Filter() {
             id="column"
             name="column"
             value={ numFilter.column }
-            onChange={ handleChange }
+            onChange={ filterChange }
           >
             { NUM_FILTER_OPT.filter((optt) => !usedColumns
               .some((column) => optt === column))
@@ -81,7 +97,7 @@ export default function Filter() {
             id="comparison"
             name="comparison"
             value={ numFilter.comparison }
-            onChange={ handleChange }
+            onChange={ filterChange }
           >
             { COMP_FILTER_OPT.map((opt) => (
               <option value={ opt } key={ opt }>{ opt }</option>
@@ -93,7 +109,7 @@ export default function Filter() {
           data-testid="value-filter"
           name="value"
           value={ numFilter.value }
-          onChange={ handleChange }
+          onChange={ filterChange }
         />
         <button
           type="submit"
@@ -101,6 +117,50 @@ export default function Filter() {
         >
           Filtrar
 
+        </button>
+      </form>
+      <form onSubmit={ (e) => handleSubmit(e, 'sort') }>
+        <label htmlFor="column_sort">
+          Ordenar
+          <select
+            data-testid="column-sort"
+            id="column_sort"
+            name="columnSort"
+            value={ numFilter.column }
+            onChange={ orderChange }
+          >
+            { NUM_FILTER_OPT.map((opt) => (
+              <option value={ opt } key={ opt }>{ opt }</option>
+            ))}
+          </select>
+        </label>
+        <label htmlFor="asc">
+          <input
+            type="radio"
+            name="sortOrder"
+            value="ASC"
+            data-testid="column-sort-input-asc"
+            onClick={ orderChange }
+            id="asc"
+          />
+          Ascendente
+        </label>
+        <label htmlFor="desc">
+          <input
+            type="radio"
+            name="sortOrder"
+            value="DESC"
+            data-testid="column-sort-input-desc"
+            onClick={ orderChange }
+            id="desc"
+          />
+          Descendente
+        </label>
+        <button
+          type="submit"
+          data-testid="column-sort-button"
+        >
+          Ordenar
         </button>
       </form>
       <button

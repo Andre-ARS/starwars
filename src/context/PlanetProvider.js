@@ -6,6 +6,7 @@ function PlanetProvider({ children }) {
   const [data, setData] = useState();
   const [filterByName, setfilterByName] = useState('');
   const [filterByNumericValues, setfilterByNumericValues] = useState('');
+  const [sort, setSort] = useState('');
   const [multFilter, setMultfilter] = useState([]);
 
   useEffect(() => {
@@ -19,14 +20,32 @@ function PlanetProvider({ children }) {
     fetchPlanets();
   }, []);
 
+  const getFilteredValues = (arr) => {
+    let filter = arr;
+    multFilter.map(({ column, comparison, value }) => {
+      if (comparison === 'maior que') {
+        filter = filter.filter((planet) => parseFloat(planet[column]) > value);
+      } else if (comparison === 'menor que') {
+        filter = filter.filter((planet) => parseFloat(planet[column]) < value);
+      } else {
+        filter = filter.filter((planet) => planet[column] === value);
+      }
+      return filter;
+    });
+    return filter;
+  };
+
   const contextValue = {
     data,
     filterByName,
     filterByNumericValues,
     multFilter,
+    sort,
     setfilterByName,
     setfilterByNumericValues,
     setMultfilter,
+    setSort,
+    getFilteredValues,
   };
 
   return (

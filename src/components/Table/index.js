@@ -8,31 +8,42 @@ export default function Table() {
     data,
     filterByName,
     filterByNumericValues,
-    multFilter } = useContext(PlanetContext);
+    sort,
+    getFilteredValues } = useContext(PlanetContext);
 
   if (!data) return <Loading />;
 
-  const getFilteredValues = (arr) => {
-    let filteredValues = arr;
-    multFilter.map(({ column, comparison, value }) => {
-      let filter = [];
-      if (comparison === 'maior que') {
-        filter = filteredValues.filter((planet) => parseFloat(planet[column]) > value);
-      } else if (comparison === 'menor que') {
-        filter = filteredValues.filter((planet) => parseFloat(planet[column]) < value);
-      } else {
-        filter = filteredValues.filter((planet) => planet[column] === value);
-      }
-      filteredValues = filter;
-      return filter;
-    });
-    return filteredValues;
+  const sortFunc = (a, b) => {
+    const ONE_NEG = -1;
+    const x = a.name.toLowerCase();
+    const y = b.name.toLowerCase();
+    if (x < y) return ONE_NEG;
+    if (x > y) return 1;
+    return 0;
+  };
+
+  const sortByColumn = (arr) => {
+    const { columnSort, sortOrder } = sort;
+
+    const removeUKN = arr.filter((planet) => planet[columnSort] !== 'unknown');
+    const unknowns = arr.filter((planet) => planet[columnSort] === 'unknown')
+      .sort(sortFunc);
+
+    const planetSort = sortOrder === 'ASC'
+      ? removeUKN.sort((a, b) => a[columnSort] - b[columnSort])
+      : removeUKN.sort((a, b) => b[columnSort] - a[columnSort]);
+    return [...planetSort, ...unknowns];
   };
 
   const tableHeads = Object.keys(data.results[0]).filter((key) => key !== 'residents');
   const planets = data.results
     .filter(({ name }) => name.includes(filterByName));
-  const filtredPlanets = filterByNumericValues ? getFilteredValues(planets) : planets;
+  const filteredPlanets = filterByNumericValues
+    ? getFilteredValues(planets)
+    : planets;
+  const sortedPlanets = sort
+    ? sortByColumn(filteredPlanets)
+    : filteredPlanets.sort(sortFunc);
 
   return (
     <main>
@@ -44,9 +55,17 @@ export default function Table() {
           </tr>
         </thead>
         <tbody>
-          { filtredPlanets.map((planet) => (
+          { sortedPlanets.map((planet) => (
             <tr key={ planet.name }>
-              { tableHeads.map((head) => <td key={ planet[head] }>{ planet[head] }</td>)}
+              { tableHeads.map((head, i) => (
+                <td
+                  key={ planet[head] }
+                  data-testid={ i === 0 ? 'planet-name' : null }
+                >
+                  { planet[head] }
+
+                </td>
+              ))}
             </tr>
           )) }
         </tbody>
