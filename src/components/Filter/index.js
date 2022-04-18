@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import PlanetContext from '../../context/PlanetContext';
 
 const NUM_FILTER_OPT = [
@@ -23,13 +23,6 @@ export default function Filter() {
     value: 0,
   });
   const usedColumns = multFilter.map(({ column }) => column);
-  useEffect(() => {
-    setNumFilter({
-      ...numFilter,
-      column: NUM_FILTER_OPT.filter((optt) => !usedColumns
-        .some((column) => optt === column))[0],
-    });
-  }, [multFilter]);
 
   const handleChange = ({ target: { name, value } }) => {
     setNumFilter({
@@ -43,6 +36,7 @@ export default function Filter() {
 
     setfilterByNumericValues({ ...numFilter });
     setMultfilter([...multFilter, { ...numFilter }]);
+    setNumFilter({ ...numFilter, value: 0 });
   };
 
   return (
