@@ -1,7 +1,6 @@
 import React, { useContext } from 'react';
 import PlanetContext from '../../context/PlanetContext';
 import FilterDisplay from '../FilterDisplay';
-import Loading from '../Loading';
 
 export default function Table() {
   const {
@@ -11,7 +10,7 @@ export default function Table() {
     sort,
     getFilteredValues } = useContext(PlanetContext);
 
-  if (!data) return <Loading />;
+  if (!data) return null;
 
   const sortFunc = (a, b) => {
     const ONE_NEG = -1;
@@ -35,7 +34,11 @@ export default function Table() {
     return [...planetSort, ...unknowns];
   };
 
-  const tableHeads = Object.keys(data.results[0]).filter((key) => key !== 'residents');
+  const tableHeads = Object.keys(data.results[0])
+    .filter((key) => {
+      const notWanted = ['residents', 'created', 'edited', 'url'];
+      return !notWanted.includes(key);
+    });
   const planets = data.results
     .filter(({ name }) => name.includes(filterByName));
   const filteredPlanets = filterByNumericValues

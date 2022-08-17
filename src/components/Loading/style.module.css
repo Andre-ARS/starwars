@@ -1,0 +1,10 @@
+.loading_container {
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  width: 100%;
+}
+
+.gif {
+  width: 100%;
+}

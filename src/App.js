@@ -1,15 +1,20 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import './App.css';
 import Filter from './components/Filter';
 import Table from './components/Table';
-import PlanetProvider from './context/PlanetProvider';
+import PlanetContext from './context/PlanetContext';
+import Loading from './components/Loading';
 
 function App() {
+  const { data } = useContext(PlanetContext);
   return (
-    <PlanetProvider>
-      <Filter />
-      <Table />
-    </PlanetProvider>
+    data
+      ? (
+        <>
+          <Filter />
+          <Table />
+        </>)
+      : (<Loading />)
   );
 }
 

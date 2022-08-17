@@ -2,12 +2,17 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import PlanetContext from './PlanetContext';
 
+// const LOADING_TIMEOUT = 6000;
+
 function PlanetProvider({ children }) {
   const [data, setData] = useState();
   const [filterByName, setfilterByName] = useState('');
   const [filterByNumericValues, setfilterByNumericValues] = useState('');
   const [sort, setSort] = useState('');
   const [multFilter, setMultfilter] = useState([]);
+  const [loading] = useState(true);
+  const [dropSort, setdropSort] = useState(false);
+  const [dropFilter, setdropFilter] = useState(false);
 
   useEffect(() => {
     const fetchPlanets = async () => {
@@ -19,6 +24,12 @@ function PlanetProvider({ children }) {
 
     fetchPlanets();
   }, []);
+
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setLoading(false);
+  //   }, LOADING_TIMEOUT);
+  // });
 
   const getFilteredValues = (arr) => {
     let filter = arr;
@@ -35,17 +46,39 @@ function PlanetProvider({ children }) {
     return filter;
   };
 
+  const handleClick = ({ target }, type) => {
+    if (['P', 'path', 'svg', 'DIV'].some((tag) => tag === target.tagName)) {
+      if (type === 'sort') {
+        const sortForm = document.querySelector('.style_sort_form__1y499');
+
+        sortForm.style.height = sortForm.style.height !== '227px' ? '227px' : '0';
+        setdropSort(!dropSort);
+      } else {
+        const filter = document.querySelector('.style_filter_form__CaBsp');
+
+        filter.style.height = filter.style.height !== '227px' ? '227px' : '0';
+        setdropFilter(!dropFilter);
+      }
+    }
+  };
+
   const contextValue = {
     data,
     filterByName,
     filterByNumericValues,
     multFilter,
     sort,
+    loading,
+    dropFilter,
+    dropSort,
     setfilterByName,
     setfilterByNumericValues,
     setMultfilter,
     setSort,
     getFilteredValues,
+    setdropSort,
+    setdropFilter,
+    handleClick,
   };
 
   return (

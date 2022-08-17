@@ -1,7 +1,11 @@
 import React from 'react';
+import logoGif from '../../assets/images/projectIntro.gif';
+import style from './style.module.css';
 
 export default function Loading() {
   return (
-    <h2>Loading...</h2>
+    <div className={ style.loading_container }>
+      <img src={ logoGif } alt="" className={ style.gif } />
+    </div>
   );
 }

@@ -1,0 +1,123 @@
+.header_container {
+  align-items: center;
+  background-color: var(--secondary-color);
+  border-radius: 10px;
+  display: flex;
+  height: 100px;
+  justify-content: space-between;
+  margin: auto;
+  margin-top: 15px;
+  padding: 0 59px;
+  width: 94.7%;
+}
+
+.filters_container, .sort_container {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  width: 420px;
+}
+
+.filters_container button, .sort_container button {
+  background-color: var(--accent);
+  border: none;
+  border-radius: 10px;
+  color: var(--stroke);
+  cursor: pointer;
+  font-size: 20px;
+  font-weight: 900;
+  height: 58px;
+  width: 114px;
+}
+
+.column_filter {
+  background-color: var(--main-color);
+  border-radius: 10px;
+  color: var(--stroke);
+  display: flex;
+  flex-direction: column;
+  font-size: 20px;
+  height: 50px;
+  justify-content: center;
+  padding: 0 8px 0 30px;
+  position: relative;
+  width: 269px;
+}
+
+.column_sort {
+  background-color: var(--main-color);
+  border-radius: 10px;
+  color: var(--stroke);
+  display: flex;
+  flex-direction: column;
+  font-size: 20px;
+  height: 50px;
+  justify-content: center;
+  padding: 0 8px 0 30px;
+  position: relative;
+  width: 269px;
+}
+
+.column_filter svg, .column_sort svg {
+  color: var(--accent);
+  position: absolute;
+  right: 15px;
+}
+
+.filter_form {
+  align-items: center;
+  background-color: var(--stroke);
+  border: var(--main-color) 2px solid;
+  border-radius: 0 0 10px 10px;
+  display: flex;
+  flex-direction: column;
+  height: 0;
+  justify-content: center;
+  left: 0;
+  overflow: hidden;
+  position: absolute;
+  top: 42px;
+  transition: height 500ms ease-in-out;
+  width: 269px;
+}
+
+.sort_form {
+  align-items: center;
+  background-color: var(--stroke);
+  border: var(--main-color) 2px solid;
+  border-radius: 0 0 10px 10px;
+  display: flex;
+  flex-direction: column;
+  height: 0;
+  justify-content: center;
+  overflow: hidden;
+  position: absolute;
+  right: 0;
+  top: 42px;
+  transition: height 500ms ease-in-out;
+  width: 269px;
+}
+
+
+.filter_form label, .sort_form label {
+  color: var(--main-color);
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 5px;
+  width: 146px;
+}
+
+.name_filter {
+  background-color: var(--main-color);
+  border: none;
+  border-radius: 10px;
+  color: var(--stroke);
+  font-size: 20px;
+  height: 56px;
+  padding: 0 30px;
+  width: 324px;
+}
+
+.name_filter::placeholder {
+  color: var(--secondary-color);
+}
